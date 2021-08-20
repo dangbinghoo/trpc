@@ -246,6 +246,7 @@ struct TcpHdl {
 /// simple standard Thread RPC server
 mixin template thrdRPCTcpSrvTemplate(alias C, alias CtorCall) {
     import std.socket : Socket, SocketSet, SocketException;
+	import std.experimental.logger : log, LogLevel;
     void thrdRPCTCPSrv(TcpHdl * tcphdl) {
         import core.thread : msecs, Thread;
         import std.conv : to;

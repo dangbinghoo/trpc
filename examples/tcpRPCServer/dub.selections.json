@@ -1,0 +1,9 @@
+{
+	"fileVersion": 1,
+	"versions": {
+		"asdf": "0.7.11",
+		"mir-algorithm": "3.10.79",
+		"mir-core": "1.1.76",
+		"trpc": "0.1.0"
+	}
+}

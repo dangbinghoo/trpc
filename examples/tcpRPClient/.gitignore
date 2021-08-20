@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/tcprpclient
+tcprpclient.so
+tcprpclient.dylib
+tcprpclient.dll
+tcprpclient.a
+tcprpclient.lib
+tcprpclient-test-*
+*.exe
+*.o
+*.obj
+*.lst
