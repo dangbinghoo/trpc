@@ -103,14 +103,16 @@ struct IfInfo(T) if (is(T == class) || is(T == interface))
                 pr.name = _paramident[pi];
                 if (_paramstoretype[pi] == ParameterStorageClass.out_)
                     pr.storetype = "out";
-                else if (_paramstoretype[pi] == ParameterStorageClass.in_)
-                    pr.storetype = "in";
                 else if (_paramstoretype[pi] == ParameterStorageClass.ref_)
                     pr.storetype = "ref";
                 else if (_paramstoretype[pi] == ParameterStorageClass.return_)
                     pr.storetype = "return";
                 else if (_paramstoretype[pi] == ParameterStorageClass.none)
                     pr.storetype = "none";
+                static if (__VERSION__ > 2093L) {
+                    if (_paramstoretype[pi] == ParameterStorageClass.in_)
+                        pr.storetype = "in";
+                }
                 methodInfos[i].params ~= pr;
             }
             methodInfos[i].rettype = ReturnType!f.stringof;

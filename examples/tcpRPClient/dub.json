@@ -4,7 +4,7 @@
 	],
 	"copyright": "Copyright © 2021, dangbinghoo",
 	"dependencies": {
-		"trpc": "~>0.1.1"
+		"trpc": {"path" : "../.."}
 	},
 	"description": "trpc TCP-Client example",
 	"license": "LGPL-3.0",
