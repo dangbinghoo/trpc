@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/trpc
+trpc.so
+trpc.dylib
+trpc.dll
+trpc.a
+trpc.lib
+trpc-test-*
+*.exe
+*.o
+*.obj
+*.lst

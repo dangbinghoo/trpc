@@ -1,0 +1,14 @@
+{
+	"authors": [
+		"dangbinghoo"
+	],
+	"copyright": "Copyright © 2021, dangbinghoo",
+	"dependencies": {
+		"asdf": "~>0.7.11"
+	},
+	"targetType": "library",
+	"targetName": "trpc",
+	"description": "Light-weight Thread RPC library for D",
+	"license": "LGPLv3",
+	"name": "trpc"
+}
