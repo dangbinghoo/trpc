@@ -8,7 +8,7 @@
  *   License: Subject to the terms of the MIT license
  *
  */
-module ifinfo;
+module trpc.ifinfo;
 
 
 import std.traits : hasUDA, moduleName;

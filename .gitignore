@@ -13,3 +13,4 @@ trpc-test-*
 *.o
 *.obj
 *.lst
+examples/threadRpcExample/dub.selections.json

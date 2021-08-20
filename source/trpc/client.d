@@ -1,6 +1,6 @@
-module rpcclient;
+module trpc.client;
 
-import ifinfo;
+import trpc.ifinfo;
 import asdf;
 import std.experimental.logger : log;
 

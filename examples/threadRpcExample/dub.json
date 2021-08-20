@@ -1,0 +1,12 @@
+{
+	"authors": [
+		"dangbinghoo"
+	],
+	"copyright": "Copyright © 2021, dangbinghoo",
+	"dependencies": {
+		"trpc": "~>0.1.0"
+	},
+	"description": "Thread RPC example",
+	"license": "LGPLv3",
+	"name": "threadrpcexample"
+}

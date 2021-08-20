@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/threadrpcexample
+threadrpcexample.so
+threadrpcexample.dylib
+threadrpcexample.dll
+threadrpcexample.a
+threadrpcexample.lib
+threadrpcexample-test-*
+*.exe
+*.o
+*.obj
+*.lst

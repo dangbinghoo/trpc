@@ -1,6 +1,6 @@
-module rpcserver;
+module trpc.server;
 
-import ifinfo;
+import trpc.ifinfo;
 import asdf;
 import std.json;
 
