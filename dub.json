@@ -9,6 +9,15 @@
 	"targetType": "library",
 	"targetName": "trpc",
 	"description": "Light-weight Thread RPC library for D",
-	"license": "LGPLv3",
-	"name": "trpc"
+	"license": "LGPL-3.0",
+	"name": "trpc",
+	"configurations": [
+		{
+			"name" : "default"
+		},
+		{
+			"name" : "log-rpc-info",
+			"versions": ["LogRPCInfo"]
+		}
+	]
 }

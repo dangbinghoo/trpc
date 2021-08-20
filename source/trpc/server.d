@@ -87,7 +87,9 @@ private string _mixinDispatchMethod(MethodInfo info, string srvclass_name) {
 		if (_parse_ok) {
 			try {
 				resp = serializeToJson(_outp);
-				log("Responce json is : ", resp);
+				version (LogRPCInfo) {
+					log("Responce json is : ", resp);
+				}
 			}
 			catch (Exception e) {
 				_parse_ok = false;
@@ -154,7 +156,9 @@ class ImplRpcSrvOfIf(C) {
 
 	/// execute rpc request
 	int executeMethod(string req, out string resp) {
-		log("req is ", req);
+		version (LogRPCInfo) {
+			log("req is ", req);
+		}
 		long id; string method; JSONValue params;
 		JSONValue reqjson; string respjs;
 		int ret = 0;
@@ -188,7 +192,9 @@ class ImplRpcSrvOfIf(C) {
 		}
 
 		resp = respjobj.toString;
-		log("Method retured Json-Str: ", resp);
+		version (LogRPCInfo) {
+			log("Method retured Json-Str: ", resp);
+		}
 		return ret;
 	}
 }
@@ -265,7 +271,9 @@ mixin template thrdRPCTcpSrvTemplate(alias C, alias CtorCall) {
 
                     }
                     else if (_len > 0) {
-						log("TCP-RPC server got cmd");
+						version (LogRPCInfo) {
+							log("TCP-RPC server got cmd");
+						}
                         try {
                             _req = to!string(buf[0 .. _len]);
                             srvcls.executeMethod(_req, _resp);
@@ -288,7 +296,9 @@ mixin template thrdRPCTcpSrvTemplate(alias C, alias CtorCall) {
 						r.close();
 						import std.algorithm : remove;
 						reads = reads.remove(i);
-						log("TCP total connection : ", reads.length);
+						version (LogRPCInfo) {
+							log("TCP total connection : ", reads.length);
+						}
 					}
                 }
             }

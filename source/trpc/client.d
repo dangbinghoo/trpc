@@ -220,12 +220,18 @@ class ThrdRPCTcpClient(I, int T) : ImplIfToRpc!(I, T) {
 		size_t len;
 		string _resp = "";
 		try {
-			log("sending .. <", req, ">...");
+			version (LogRPCInfo) {
+				log("sending .. <", req, ">...");
+			}
 			_tcpsock.send(req);
-			log("waiting rpc server reply...");
+			version (LogRPCInfo) {
+				log("waiting rpc server reply...");
+			}
 			len = _tcpsock.receive(recv_data);
 			_resp = to!string(cast(char[])recv_data[0 .. len]);
-			log("got rply : ", _resp);
+			version (LogRPCInfo) {
+				log("got rply : ", _resp);
+			}
 		}
 		catch (Exception e) {
 			log(e.msg);

@@ -9,8 +9,10 @@ trpc.dll
 trpc.a
 trpc.lib
 trpc-test-*
+libtrpc.a
 *.exe
 *.o
 *.obj
 *.lst
-examples/threadRpcExample/dub.selections.json
+*dub.selections.json
+
