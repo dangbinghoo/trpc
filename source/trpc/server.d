@@ -256,6 +256,7 @@ mixin template thrdRPCTcpSrvTemplate(alias C, alias CtorCall) {
     void thrdRPCTCPSrv(TcpHdl * tcphdl) {
         import core.thread : msecs, Thread;
         import std.conv : to;
+        import std.algorithm : remove;
         auto _srvimpl = CtorCall;
         auto srvcls = new ImplRpcSrvOfIf!C(_srvimpl);
 
@@ -263,12 +264,28 @@ mixin template thrdRPCTcpSrvTemplate(alias C, alias CtorCall) {
         char[] buf = new char[tcphdl._maxrecv];
         string _req, _resp;
 
+		private void closeClientSocketConn(ulong i, ref Socket sock) {
+			try {
+				version (LogRPCInfo) {
+					log("Client connection from port ", sock.remoteAddress().toString(), 
+						"was closed or in Exception, remove it!");
+				}
+			}
+			catch (Exception e) {
+
+			}
+			
+			sock.close();
+			reads = reads.remove(i);
+		}
+
 		void readAndProcess() {
             foreach (i, r; reads) {
                 if (tcphdl.sockset.isSet(r)) {
                     auto _len = r.receive(buf);
                     if (_len == Socket.ERROR) {
-
+                        closeClientSocketConn();
+						continue;
                     }
                     else if (_len > 0) {
 						version (LogRPCInfo) {
@@ -281,45 +298,54 @@ mixin template thrdRPCTcpSrvTemplate(alias C, alias CtorCall) {
                         }
                         catch (Exception e) {
                             log(e.msg);
-                            return;
+                            continue;
                         }
                     }
-                    else {
-                        try {
+                    else { // receive returned 0 (EOF) means client just closed.
+                        closeClientSocketConn();
+						continue;
+                    }
 
-                        }
-                        catch (SocketException) {
-                            log("Socket connection closed.");
-                        }
-                    }
 					if (tcphdl.close_after_resp) {
 						r.close();
-						import std.algorithm : remove;
 						reads = reads.remove(i);
 						version (LogRPCInfo) {
 							log("TCP total connection : ", reads.length);
 						}
 					}
                 }
+
+				if (!r.isAlive) {
+					closeClientSocketConn(i, r);
+					continue;
+				}
             }
         }
 
         void connCheck() {
-            if (tcphdl.sockset.isSet(tcphdl.tcpsock)) {
-                Socket sc = null;
-                sc = tcphdl.tcpsock.accept();
-                if (reads.length < tcphdl._maxconn) {
-                    reads ~= sc;
-                }
-                else {
-                    sc.close();
-                }
-                scope (failure) {
-                    log(LogLevel.critical, "Error accepting");
-                    if (sc)
-                        sc.close();
-                }
-            }
+			if (reads.length < tcphdl._maxconn) {
+				if (tcphdl.sockset.isSet(tcphdl.tcpsock)) {
+					Socket sc = null;
+					try {
+						sc = tcphdl.tcpsock.accept();
+					}
+					catch (Exception e) {
+						log(LogLevel.critical, e.msg);
+						return;
+					}
+
+					reads ~= sc;
+
+					scope (failure) {
+						log(LogLevel.critical, "Error accepting");
+						if (sc)
+							sc.close();
+					}
+				}
+			}
+            else {
+				log(LogLevel.critical, "ERRRRR! can not open more tcp connections!");
+			}
         }
 
         while (true) {
@@ -330,9 +356,6 @@ mixin template thrdRPCTcpSrvTemplate(alias C, alias CtorCall) {
             Socket.select(tcphdl.sockset, null, null);
 			readAndProcess();
 			connCheck();
-			if (tcphdl.close_after_resp) {
-				tcphdl.sockset.reset();
-			}
         }
     }
 }

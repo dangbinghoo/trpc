@@ -227,10 +227,26 @@ class ThrdRPCTcpClient(I, int T) : ImplIfToRpc!(I, T) {
 			version (LogRPCInfo) {
 				log("waiting rpc server reply...");
 			}
-			len = _tcpsock.receive(recv_data);
-			_resp = to!string(cast(char[])recv_data[0 .. len]);
-			version (LogRPCInfo) {
-				log("got rply : ", _resp);
+			int tries = timeout / 100;
+			if (_tcpsock.blocking) {
+				len = _tcpsock.receive(recv_data);
+			}
+			else {
+				while (tries--) {
+					len = _tcpsock.receive(recv_data);
+					if (len > 0)
+						break;
+				}
+				if (tries <= 0) {
+					log("Request timed out!");
+				}
+			}
+
+			if (len > 0) {
+				_resp = to!string(cast(char[])recv_data[0 .. len]);
+				version (LogRPCInfo) {
+					log("got rply : ", _resp);
+				}
 			}
 		}
 		catch (Exception e) {
