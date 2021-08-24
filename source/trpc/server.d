@@ -268,7 +268,7 @@ mixin template thrdRPCTcpSrvTemplate(alias C, alias CtorCall) {
 			try {
 				version (LogRPCInfo) {
 					log("Client connection from port ", sock.remoteAddress().toString(), 
-						"was closed or in Exception, remove it!");
+						" was closed or in Exception, remove it!");
 				}
 			}
 			catch (Exception e) {
@@ -284,7 +284,7 @@ mixin template thrdRPCTcpSrvTemplate(alias C, alias CtorCall) {
                 if (tcphdl.sockset.isSet(r)) {
                     auto _len = r.receive(buf);
                     if (_len == Socket.ERROR) {
-                        closeClientSocketConn();
+                        closeClientSocketConn(i, r);
 						continue;
                     }
                     else if (_len > 0) {
@@ -302,7 +302,7 @@ mixin template thrdRPCTcpSrvTemplate(alias C, alias CtorCall) {
                         }
                     }
                     else { // receive returned 0 (EOF) means client just closed.
-                        closeClientSocketConn();
+                        closeClientSocketConn(i, r);
 						continue;
                     }
 
@@ -356,6 +356,8 @@ mixin template thrdRPCTcpSrvTemplate(alias C, alias CtorCall) {
             Socket.select(tcphdl.sockset, null, null);
 			readAndProcess();
 			connCheck();
+			// must reset sockset, otherwize, we can't accept on new conn.
+			tcphdl.sockset.reset();
         }
     }
 }
