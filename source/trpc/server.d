@@ -264,7 +264,7 @@ mixin template thrdRPCTcpSrvTemplate(alias C, alias CtorCall) {
         char[] buf = new char[tcphdl._maxrecv];
         string _req, _resp;
 
-		void closeClientSocketConn(ulong i, ref Socket sock) {
+		void closeClientSocketConn(size_t i, ref Socket sock) {
 			try {
 				version (LogRPCInfo) {
 					log("Client connection from port ", sock.remoteAddress().toString(), 
